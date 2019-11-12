@@ -236,6 +236,18 @@ class Coordinate implements CoordinateInterface, \JsonSerializable
             );
         }
 
+        // S 40°26.7717 E 79°56.93172
+        if (preg_match('/([ns]{1})\s*([0-9]{1,2})\D+([0-9]{1,2}\.?\d*)\D*[, ] ?([we]{1})\s*([0-9]{1,3})\D+([0-9]{1,2}\.?\d*)\D*$/i',
+            $coordinates, $match)) {
+            $latitude  = $match[2] + $match[3] / 60;
+            $longitude = $match[5] + $match[6] / 60;
+
+            return array(
+                'N' === strtoupper($match[1]) ? $latitude  : -$latitude,
+                'E' === strtoupper($match[4]) ? $longitude : -$longitude
+            );
+        }
+
         // 40:26:46N, 079:56:55W
         // 40:26:46.302N 079:56:55.903W
         // 40°26′47″N 079°58′36″W
